@@ -1,26 +1,18 @@
 
-task downloadZipFile(type: Download) {
-    src 'http://storage.googleapis.com/download.tensorflow.org/models/tflite/coco_ssd_mobilenet_v1_1.0_quant_2018_06_29.zip'
-    dest new File(buildDir, 'zips/')
+task downloadTestFile(type: Download) {
+    src 'https://tfhub.dev/tensorflow/lite-model/ssd_mobilenet_v1/1/metadata/2?lite-format=tflite'
+    dest project.ext.TEST_ASSETS_DIR + '/mobilenetv1.tflite'
     overwrite false
 }
 
-
-task downloadAndUnzipFile(dependsOn: downloadZipFile, type: Copy) {
-    from zipTree(downloadZipFile.dest)
-    into project.ext.ASSET_DIR
+task downloadModelFile(type: Download) {
+    src 'https://drive.google.com/uc?export=download&id=1JzvpDPBeauxcT-HVxlCgVCYDof8u0-Dm'
+    dest project.ext.ASSET_DIR + '/model.tflite'
+    overwrite false
 }
 
-
-task extractModels(type: Copy) {
-    dependsOn downloadAndUnzipFile
+ 
 }
 
-tasks.whenTaskAdded { task ->
-    if (task.name == 'assembleDebug') {
-        task.dependsOn 'extractModels'
-    }
-    if (task.name == 'assembleRelease') {
-        task.dependsOn 'extractModels'
-    }
-}
+preBuild.dependsOn downloadModelFile ,
+        downloadTestFile
