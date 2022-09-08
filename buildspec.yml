@@ -8,5 +8,5 @@ phases:
       - ./gradlew assembleDebug
 artifacts:
   files:
-     - '**/*'
+      - app/build/outputs/apk/debug/app-debug.apk
    
